@@ -9,6 +9,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "predeploy": "yarn build",
     "deploy": "gh-pages -d build",
     "lint": "eslint . --fix && npx prettier --write .",
     "lint:scripts": "npx prettier --write ./.scripts",
