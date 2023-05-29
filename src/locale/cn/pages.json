@@ -11,11 +11,6 @@
       "validators": "的验证人",
       "website": "个人网站"
     },
-    "favorites": {
-      "favoriteValidators": "藏夹中的验证人",
-      "fetchingFavoriteValidators": "正在获取收藏夹的验证人",
-      "noFavorites": "无收藏夹"
-    },
     "nominate": {
       "activeNominations": "活跃提名人",
       "addFromFavorites": "从收藏夹添加",
@@ -77,7 +72,7 @@
       "activePools": "活跃提名池",
       "addressCopied": "地址已复制到剪贴板",
       "adjustedRewardsRate": "调整后收益率",
-      "afterInflation": "通货膨胀后",
+      "afterInflation": "加入通货膨胀后",
       "available": "可用",
       "balance": "余额",
       "bondedInPools": "提名池中当前质押的{{networkUnit}}总数",
@@ -146,6 +141,7 @@
       "bondedFunds": "己质押金额",
       "cancel": "取消",
       "closePool": "可提取己解锁金额并关闭池",
+      "compound": "复利",
       "create": "创建",
       "createAPool": "创建提名池",
       "createPool": "创建提名池",
@@ -216,11 +212,17 @@
     },
     "validators": {
       "activeValidators": "活跃验证人",
+      "allValidators": "所有验证人",
       "averageCommission": "平均佣金",
       "connecting": "连接中",
+      "favoriteValidators": "收藏夹中的验证人",
+      "favorites": "收藏夹",
+      "fetchingFavoriteValidators": "正在获取收藏夹的验证人",
       "fetchingValidators": "正在获取验证人信息",
       "networkValidators": "验证人列表",
-      "totalValidators": "所有验证人"
+      "noFavorites": "无收藏夹",
+      "totalValidators": "所有验证人",
+      "validators": "验证人"
     }
   }
 }

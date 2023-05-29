@@ -1,8 +1,13 @@
 {
   "base": {
     "active": "Active",
+    "allowAll": "Allow All",
+    "allowAnyoneCompound": "Allow anyone to compound rewards on your behalf.",
+    "allowAnyoneCompoundWithdraw": "Allow anyone to compound or withdraw rewards on your behalf.",
+    "allowAnyoneWithdraw": "Allow anyone to withdraw rewards on your behalf.",
+    "allowCompound": "Allow Compound",
+    "allowWithdraw": "Allow Withdraw",
     "community": "Community",
-    "favorites": "Favorites",
     "feedback": "Feedback",
     "help": "Help",
     "inactive": "Inactive",

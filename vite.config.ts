@@ -10,7 +10,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/polkadot-staking-dashboard-wc-demo/',
+  base: '/',
   plugins: [
     eslint(),
     react(),
@@ -22,6 +22,13 @@ export default defineConfig({
   ],
   build: {
     outDir: 'build',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          '@substrate/connect': ['@substrate/connect'],
+        },
+      },
+    },
   },
   server: {
     fs: {

@@ -3,16 +3,15 @@
 
 import { faBars, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ModalPadding } from '@polkadotcloud/core-ui';
 import { useModal } from 'contexts/Modal';
 import { useActivePools } from 'contexts/Pools/ActivePools';
 import { useBondedPools } from 'contexts/Pools/BondedPools';
 import { usePoolMemberships } from 'contexts/Pools/PoolMemberships';
-import type { BondedPool } from 'contexts/Pools/types';
 import { Identicon } from 'library/Identicon';
 import { Title } from 'library/Modal/Title';
 import { useStatusButtons } from 'pages/Pools/Home/Status/useStatusButtons';
 import { useTranslation } from 'react-i18next';
-import { PaddingWrapper } from '../Wrappers';
 import { ContentWrapper, StyledButton } from './Wrappers';
 
 export const AccountPoolRoles = () => {
@@ -28,7 +27,7 @@ export const AccountPoolRoles = () => {
   return (
     <>
       <Title title={t('allPoolRoles')} icon={faBars} />
-      <PaddingWrapper>
+      <ModalPadding>
         <ContentWrapper>
           {membership && (
             <>
@@ -49,17 +48,17 @@ export const AccountPoolRoles = () => {
             ))}
           </div>
         </ContentWrapper>
-      </PaddingWrapper>
+      </ModalPadding>
     </>
   );
 };
 
-const Button = ({ item, poolId }: { item: Array<string>; poolId: string }) => {
+const Button = ({ item, poolId }: { item: string[]; poolId: string }) => {
   const { t } = useTranslation('modals');
   const { setStatus } = useModal();
   const { bondedPools } = useBondedPools();
   const { setSelectedPoolId } = useActivePools();
-  const pool = bondedPools.find((b: BondedPool) => String(b.id) === poolId);
+  const pool = bondedPools.find((b) => String(b.id) === poolId);
   const stash = pool?.addresses?.stash || '';
 
   return (

@@ -1,6 +1,11 @@
 // Copyright 2023 @paritytech/polkadot-staking-dashboard authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import {
+  ModalBackground,
+  ModalContainer,
+  ModalHeight,
+} from '@polkadotcloud/core-ui';
 import { useModal } from 'contexts/Modal';
 import { useAnimation } from 'framer-motion';
 import { ErrorFallbackModal } from 'library/ErrorBoundary';
@@ -16,9 +21,9 @@ import { ChooseLanguage } from './ChooseLanguage';
 import { ClaimReward } from './ClaimReward';
 import { Connect } from './Connect';
 import { GoToFeedback } from './GoToFeedback';
+import { ImportLedger } from './ImportLedger';
+import { ImportVault } from './ImportVault';
 import { JoinPool } from './JoinPool';
-import { LeavePool } from './LeavePool';
-import { LedgerImport } from './LedgerImport';
 import { ManageFastUnstake } from './ManageFastUnstake';
 import { ManagePool } from './ManagePool';
 import { Networks } from './Networks';
@@ -37,12 +42,7 @@ import { UpdateController } from './UpdateController';
 import { UpdatePayee } from './UpdatePayee';
 import { ValidatorMetrics } from './ValidatorMetrics';
 import { WithdrawPoolMember } from './WithdrawPoolMember';
-import {
-  ContentWrapper,
-  HeightWrapper,
-  ModalBlurWrapper,
-  ModalWrapper,
-} from './Wrappers';
+import { ContentWrapper } from './Wrappers';
 
 export const Modal = () => {
   const {
@@ -54,10 +54,11 @@ export const Modal = () => {
     height,
     resize,
     config,
+    modalMaxHeight,
   } = useModal();
   const controls = useAnimation();
 
-  const maxHeight = window.innerHeight * 0.8;
+  const maxHeight = modalMaxHeight();
 
   const onFadeIn = async () => {
     await controls.start('visible');
@@ -128,25 +129,28 @@ export const Modal = () => {
 
   return (
     <>
-      <ModalBlurWrapper
+      <ModalBackground
         initial={initial}
         animate={controls}
         transition={transition}
         variants={variants}
       />
       {status !== 3 ? (
-        <ModalWrapper
+        <ModalContainer
           initial={initial}
           animate={controls}
           transition={transition}
           variants={variants}
         >
           <div>
-            <HeightWrapper
+            <ModalHeight
               size={size}
               style={{
                 height,
-                overflow: height >= maxHeight ? 'scroll' : 'hidden',
+                overflow:
+                  height >= maxHeight && !config?.disableScroll
+                    ? 'scroll'
+                    : 'hidden',
               }}
             >
               <ContentWrapper ref={modalRef}>
@@ -162,8 +166,8 @@ export const Modal = () => {
                   {modal === 'Accounts' && <Accounts />}
                   {modal === 'GoToFeedback' && <GoToFeedback />}
                   {modal === 'JoinPool' && <JoinPool />}
-                  {modal === 'LedgerImport' && <LedgerImport />}
-                  {modal === 'LeavePool' && <LeavePool />}
+                  {modal === 'ImportLedger' && <ImportLedger />}
+                  {modal === 'ImportVault' && <ImportVault />}
                   {modal === 'ManagePool' && <ManagePool />}
                   {modal === 'ManageFastUnstake' && <ManageFastUnstake />}
                   {modal === 'Networks' && <Networks />}
@@ -186,7 +190,7 @@ export const Modal = () => {
                   {modal === 'WithdrawPoolMember' && <WithdrawPoolMember />}
                 </ErrorBoundary>
               </ContentWrapper>
-            </HeightWrapper>
+            </ModalHeight>
             <button
               type="button"
               className="close"
@@ -197,7 +201,7 @@ export const Modal = () => {
               &nbsp;
             </button>
           </div>
-        </ModalWrapper>
+        </ModalContainer>
       ) : null}
     </>
   );

@@ -264,6 +264,14 @@
           "This does not mean that you were not nominating or generating rewards in that period - only that the payout for that period was not yet made."
         ]
       ],
+      "polkadotVault": [
+        "Polkadot Vault",
+        [
+          "Polkadot Vault (formerly Parity Signer) is a cold storage solution that allows you to use a phone in airplane mode as an air-gapped wallet.",
+          "The Vault app is not technically a wallet, as it does not allow to transfer funds.",
+          "It is more of a key-chain tool that will enable you the create, manage, and restore accounts."
+        ]
+      ],
       "poolMembership": [
         "Pool Membership",
         [
@@ -289,6 +297,20 @@
           "Depositor: Creates the pool and is the initial member. The depositor can only leave the pool once all other members have left. Once they leave by withdrawing, the pool is fully removed from the system.",
           "Nominator: Can select the validators the pool nominates.",
           "State-Toggler: Can change the pool's state and kick (permissionlessly unbond/withdraw) members if the pool is blocked."
+        ]
+      ],
+      "proxyAccounts": [
+        "Proxy Accounts",
+        [
+          "Proxy accounts are accounts that act on behalf of another account.",
+          "In proxy account terms, the proxy account is called the delegate account, and the proxied account it is acting on behalf of is called the delegator account.",
+          "Staking dashboard allows delegates to sign transactions on behalf of a delegator. If a delegate exists in the dashboard without its delegator, the delegator is imported as a read only account automatically."
+        ]
+      ],
+      "readOnlyAccounts": [
+        "Read Only Accounts",
+        [
+          "Read Only accounts are accounts that can be imported, but are not able to sign transactions. This means that you can view the account's balance and staking information, but you cannot perform any staking actions with it."
         ]
       ],
       "reserveBalance": [

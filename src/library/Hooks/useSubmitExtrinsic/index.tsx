@@ -4,13 +4,17 @@
 import type { SignClient } from '@walletconnect/sign-client/dist/types/client';
 import type { SessionTypes } from '@walletconnect/types';
 import BigNumber from 'bignumber.js';
-import { isSupportedProxyCall } from 'config/proxies';
+import {
+  isSupportedProxyCall,
+  UnsupportedIfUniqueController,
+} from 'config/proxies';
 import { DappName } from 'consts';
 import { useApi } from 'contexts/Api';
 import { useBalances } from 'contexts/Balances';
+import { useBonded } from 'contexts/Bonded';
 import { useConnect } from 'contexts/Connect';
+import { manualSigners } from 'contexts/Connect/Utils';
 import { useExtensions } from 'contexts/Extensions';
-import type { ExtensionInjected } from 'contexts/Extensions/types';
 import { useExtrinsics } from 'contexts/Extrinsics';
 import { useLedgerHardware } from 'contexts/Hardware/Ledger';
 import { useNotifications } from 'contexts/Notifications';
@@ -36,7 +40,6 @@ export const useSubmitExtrinsic = ({
     getWalletConnectClient,
     getWalletConnectSession,
     getWalletConnectChainInfo,
-    activeAccount,
     activeProxy,
   } = useConnect();
   const { addNotification } = useNotifications();
@@ -44,6 +47,8 @@ export const useSubmitExtrinsic = ({
   const { addPending, removePending } = useExtrinsics();
   const { getNonce } = useBalances();
   const { getProxyDelegate } = useProxies();
+  const { getBondedAccount } = useBonded();
+  const controller = getBondedAccount(from);
   const {
     setTxFees,
     incrementPayloadUid,
@@ -81,11 +86,16 @@ export const useSubmitExtrinsic = ({
       return false;
     }
 
-    const proxyDelegate = getProxyDelegate(activeAccount, activeProxy);
+    const proxyDelegate = getProxyDelegate(from, activeProxy);
     const proxyType = proxyDelegate?.proxyType || '';
     const pallet = tx?.method.toHuman().section;
     const method = tx?.method.toHuman().method;
     const call = `${pallet}.${method}`;
+
+    // If call is from controller, & controller is different from stash, then proxy is not
+    // supported.
+    const controllerNotSupported = (c: string) =>
+      UnsupportedIfUniqueController.includes(c) && controller !== from;
 
     // If a batch call, test if every inner call is a supported proxy call.
     if (call === 'utility.batch') {
@@ -94,13 +104,18 @@ export const useSubmitExtrinsic = ({
           pallet: c.section,
           method: c.method,
         }))
-        .every((c: AnyJson) =>
-          isSupportedProxyCall(proxyType, c.pallet, c.method)
+        .every(
+          (c: AnyJson) =>
+            isSupportedProxyCall(proxyType, c.pallet, c.method) &&
+            !controllerNotSupported(`${pallet}.${method}`)
         );
     }
 
     // Check if the current call is a supported proxy call.
-    return isSupportedProxyCall(proxyType, pallet, method);
+    return (
+      isSupportedProxyCall(proxyType, pallet, method) &&
+      !controllerNotSupported(call)
+    );
   };
 
   const [proxySupported, setProxySupported] = useState<boolean>(
@@ -237,10 +252,8 @@ export const useSubmitExtrinsic = ({
     const { source } = account;
 
     // if `activeAccount` is imported from an extension, ensure it is enabled.
-    if (source !== 'ledger') {
-      const extension = extensions.find(
-        (e: ExtensionInjected) => e.id === source
-      );
+    if (!manualSigners.includes(source)) {
+      const extension = extensions.find((e) => e.id === source);
       if (extension === undefined) {
         throw new Error(`${t('walletNotFound')}`);
       } else if (source !== 'wallet-connect') {
@@ -300,7 +313,7 @@ export const useSubmitExtrinsic = ({
       resetLedgerTx();
     };
 
-    const onError = (type?: 'default' | 'ledger') => {
+    const onError = (type?: string) => {
       resetTx();
       if (type === 'ledger') {
         resetLedgerTx();
@@ -402,7 +415,7 @@ export const useSubmitExtrinsic = ({
           }
         });
       } catch (e) {
-        onError('ledger');
+        onError(manualSigners.includes(source) ? source : 'default');
       }
     } else if (source === 'wallet-connect') {
       const wcSignClient: SignClient | null = getWalletConnectClient();
@@ -468,6 +481,7 @@ export const useSubmitExtrinsic = ({
     uid,
     onSubmit,
     submitting,
+    submitAddress,
     proxySupported,
   };
 };

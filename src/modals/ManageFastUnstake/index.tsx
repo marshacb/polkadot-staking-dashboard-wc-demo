@@ -1,6 +1,12 @@
 // Copyright 2023 @paritytech/polkadot-staking-dashboard authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import {
+  ActionItem,
+  ModalNotes,
+  ModalPadding,
+  ModalWarnings,
+} from '@polkadotcloud/core-ui';
 import { planckToUnit } from '@polkadotcloud/utils';
 import BigNumber from 'bignumber.js';
 import { useApi } from 'contexts/Api';
@@ -9,29 +15,27 @@ import { useConnect } from 'contexts/Connect';
 import { useFastUnstake } from 'contexts/FastUnstake';
 import { useModal } from 'contexts/Modal';
 import { useNetworkMetrics } from 'contexts/Network';
-import { useStaking } from 'contexts/Staking';
 import { useTransferOptions } from 'contexts/TransferOptions';
 import { Warning } from 'library/Form/Warning';
+import { useSignerWarnings } from 'library/Hooks/useSignerWarnings';
 import { useSubmitExtrinsic } from 'library/Hooks/useSubmitExtrinsic';
 import { useUnstaking } from 'library/Hooks/useUnstaking';
-import { Action } from 'library/Modal/Action';
 import { Close } from 'library/Modal/Close';
 import { SubmitTx } from 'library/SubmitTx';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NotesWrapper, PaddingWrapper, WarningsWrapper } from '../Wrappers';
 
 export const ManageFastUnstake = () => {
   const { t } = useTranslation('modals');
   const { api, consts, network } = useApi();
   const { activeAccount } = useConnect();
-  const { getControllerNotImported } = useStaking();
   const { getBondedAccount } = useBonded();
   const { activeEra, metrics } = useNetworkMetrics();
   const { isExposed, counterForQueue, queueDeposit, meta } = useFastUnstake();
   const { setResize, setStatus } = useModal();
   const { getTransferOptions } = useTransferOptions();
   const { isFastUnstaking } = useUnstaking();
+  const { getSignerWarnings } = useSignerWarnings();
 
   const { bondDuration, fastUnstakeDeposit } = consts;
   const { fastUnstakeErasToCheckPerBlock } = metrics;
@@ -91,10 +95,12 @@ export const ManageFastUnstake = () => {
   });
 
   // warnings
-  const warnings = [];
-  if (getControllerNotImported(controller)) {
-    warnings.push(t('mustHaveController'));
-  }
+  const warnings = getSignerWarnings(
+    activeAccount,
+    true,
+    submitExtrinsic.proxySupported
+  );
+
   if (!isFastUnstaking) {
     if (freeBalance.isLessThan(fastUnstakeDeposit)) {
       warnings.push(
@@ -124,26 +130,26 @@ export const ManageFastUnstake = () => {
   return (
     <>
       <Close />
-      <PaddingWrapper>
+      <ModalPadding>
         <h2 className="title unbounded">
           {t('fastUnstake', { context: 'title' })}
         </h2>
         {warnings.length > 0 ? (
-          <WarningsWrapper>
-            {warnings.map((text: string, index: number) => (
-              <Warning key={index} text={text} />
+          <ModalWarnings withMargin>
+            {warnings.map((text, i) => (
+              <Warning key={`warning_${i}`} text={text} />
             ))}
-          </WarningsWrapper>
+          </ModalWarnings>
         ) : null}
 
         {isExposed ? (
           <>
-            <Action
+            <ActionItem
               text={t('fastUnstakeExposedAgo', {
                 count: lastExposedAgo.toNumber(),
               })}
             />
-            <NotesWrapper noPadding>
+            <ModalNotes>
               <p>
                 {t('fastUnstakeNote1', {
                   bondDuration: bondDuration.toString(),
@@ -152,14 +158,14 @@ export const ManageFastUnstake = () => {
               <p>
                 {t('fastUnstakeNote2', { count: erasRemaining.toNumber() })}
               </p>
-            </NotesWrapper>
+            </ModalNotes>
           </>
         ) : (
           <>
             {!isFastUnstaking ? (
               <>
-                <Action text={t('fastUnstake', { context: 'register' })} />
-                <NotesWrapper noPadding>
+                <ActionItem text={t('fastUnstake', { context: 'register' })} />
+                <ModalNotes>
                   <p>
                     <>
                       {t('registerFastUnstake')}{' '}
@@ -173,22 +179,22 @@ export const ManageFastUnstake = () => {
                   <p>
                     {t('fastUnstakeCurrentQueue')}: <b>{counterForQueue}</b>
                   </p>
-                </NotesWrapper>
+                </ModalNotes>
               </>
             ) : (
               <>
-                <Action text={t('fastUnstakeRegistered')} />
-                <NotesWrapper noPadding>
+                <ActionItem text={t('fastUnstakeRegistered')} />
+                <ModalNotes>
                   <p>
                     {t('fastUnstakeCurrentQueue')}: <b>{counterForQueue}</b>
                   </p>
                   <p>{t('fastUnstakeUnorderedNote')}</p>
-                </NotesWrapper>
+                </ModalNotes>
               </>
             )}
           </>
         )}
-      </PaddingWrapper>
+      </ModalPadding>
       {!isExposed ? (
         <SubmitTx
           fromController
