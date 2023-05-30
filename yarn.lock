@@ -2553,9 +2553,10 @@ binary-extensions@^2.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.2.0.tgz#75f502eeaf9ffde42fc98829645be4ea76bd9e2d"
   integrity sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==
 
-"bip32-ed25519@git+https://github.com/Zondax/bip32-ed25519.git":
+"bip32-ed25519@https://github.com/Zondax/bip32-ed25519":
   version "0.0.4"
-  resolved "git+https://github.com/Zondax/bip32-ed25519.git#0949df01b5c93885339bc28116690292088f6134"
+  uid "0949df01b5c93885339bc28116690292088f6134"
+  resolved "https://github.com/Zondax/bip32-ed25519#0949df01b5c93885339bc28116690292088f6134"
   dependencies:
     bn.js "^5.1.1"
     elliptic "^6.4.1"
@@ -5425,10 +5426,10 @@ randombytes@^2.1.0:
   dependencies:
     safe-buffer "^5.1.0"
 
-rc-slider@^10.1.1:
-  version "10.1.1"
-  resolved "https://registry.yarnpkg.com/rc-slider/-/rc-slider-10.1.1.tgz#5e82036e60b61021aba3ea0e353744dd7c74e104"
-  integrity sha512-gn8oXazZISEhnmRinI89Z/JD/joAaM35jp+gDtIVSTD/JJMCCBqThqLk1SVJmvtfeiEF/kKaFY0+qt4SDHFUDw==
+rc-slider@^10.2.0:
+  version "10.2.0"
+  resolved "https://registry.yarnpkg.com/rc-slider/-/rc-slider-10.2.0.tgz#1ee74c940b807d47939ae1b8a431b89a96ed44c5"
+  integrity sha512-Lpo8Ct66wtST/RrY4RG5OpQFcRE5fZSo8p08vprY2OMWbWiuk/TUDSz69AnaCtpWVX93XNGiznzZ7dpntYmuDQ==
   dependencies:
     "@babel/runtime" "^7.10.1"
     classnames "^2.2.5"
