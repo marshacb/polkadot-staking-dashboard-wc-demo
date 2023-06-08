@@ -39,7 +39,7 @@
     "@substrate/connect": "^0.7.26",
     "@types/lodash.throttle": "^4.1.7",
     "@walletconnect/core": "^2.4.4",
-    "@walletconnect/sign-client": "2.6.1",
+    "@walletconnect/sign-client": "2.8.0",
     "@walletconnect/types": "2.6.1",
     "@walletconnect/utils": "2.7.3",
     "@walletconnect/universal-provider": "2.6.1",
