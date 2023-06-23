@@ -41,7 +41,7 @@
     "@walletconnect/core": "^2.4.4",
     "@walletconnect/sign-client": "2.6.1",
     "@walletconnect/types": "2.6.1",
-    "@walletconnect/utils": "2.7.3",
+    "@walletconnect/utils": "2.8.2",
     "@walletconnect/universal-provider": "2.6.1",
     "@walletconnect/web3wallet": "1.5.1",
     "@web3modal/standalone": "^2.1.1",
